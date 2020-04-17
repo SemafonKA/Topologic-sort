@@ -18,13 +18,23 @@
     <ClInclude Include="Double linked list\Dlist.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Graph\Graph.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="IO files\input.txt" />
-    <Text Include="IO files\output.txt" />
+    <Text Include="IO files\input.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+    <Text Include="IO files\output.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph\Graph.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

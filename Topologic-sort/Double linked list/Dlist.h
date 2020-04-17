@@ -187,8 +187,18 @@ public:
 		Node* member = listSearch(pos);
 		return member->data;
 	}
+	const T& pos_back(int pos) const {
+		Node* member = listSearch(pos);
+		return member->data;
+	}
 	/* Вернуть значение списка в позиции pos (ссылку) */
 	T& operator[] (int pos) {
+		return pos_back(pos);
+	}
+	T& at(int pos) {
+		return pos_back(pos);
+	}
+	const T& at(int pos) const {
 		return pos_back(pos);
 	}
 

@@ -147,10 +147,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graph\Graph.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Double linked list\Dlist.h" />
+    <ClInclude Include="Graph\Graph.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="IO files\input.txt" />
