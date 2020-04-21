@@ -46,8 +46,8 @@ int Node::removeLinkTo(Node* _to) {
 	int parentPos  = isParentTo(_to);
 	if (linkPos == 0) return 2;
 	else {
-		_to->m_parents.remove(parentPos - 1);
-		m_links.remove(linkPos - 1);
+		_to->m_parents.pop(parentPos - 1);
+		m_links.pop(linkPos - 1);
 		return 1;
 	}
 }
@@ -148,7 +148,7 @@ int Graph::addElement(int _key) {
 int Graph::removeElemenent(int _key) {
 	int pos = m_findWithKey(_key);
 	if (pos != 0) {		
-		Node* element =  m_list.remove(pos - 1);
+		Node* element =  m_list.pop(pos - 1);
 		delete element;
 		return 1;
 	}

@@ -1,6 +1,7 @@
 #pragma once
-#include "../Double linked list/Dlist.h"
+
 #include <iostream>
+#include "../Dlist/Dlist.h"
 
 namespace n_Graph{
 class Node {

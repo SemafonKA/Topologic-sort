@@ -6,6 +6,7 @@ using namespace std;
 
 int main(){
     system("chcp 65001"); system("cls");
+
     cout << "Making graph..." << endl << endl;
     Graph graph(6);
     cout << "Graph size is: " << graph.size() << endl << endl;
