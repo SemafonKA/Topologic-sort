@@ -1,63 +1,15 @@
 #pragma once
 
+#include "Graph.Node.h"
 #include <iostream>
 #include "../Dlist/Dlist.h"
-
-namespace n_Graph{
-class Node {
-private:
-	int m_key{};
-	Dlist <Node*> m_parents;
-	Dlist <Node*> m_links;
-
-public:
-	/*
-		* Принимает ключ данного звена
-	*/
-	Node(int _key);
-
-	~Node();
-
-	/* 
-		* Возвращает ключ данного звена
-	*/
-	int key() const;
-
-	/*
-		* Возвращает число предков данного звена
-		* (То, сколько звеньев на него ссылаются)
-	*/
-	int parentsAmount() const;
-
-	/*
-		* Добавляет ссылку этому звену на другое звено
-	*/
-	int addLinkTo(Node* _to);
-
-	/*
-		* Проверяет, связано ли звено с другим звеном	
-		* Если да, то вернёт pos+1
-	*/
-	int isLinkedTo(const Node* _to) const;
-
-	int isParentTo(const Node* _to) const;
-
-	/*
-		* Удаляет ссылку на звено	
-	*/
-	int removeLinkTo(Node* _to);
-
-	friend std::ostream& operator<<(std::ostream& _out, n_Graph::Node& _node);
-};
-}	//namespace n_Graph
-
 
 class Graph {
 private:
 	Dlist <n_Graph::Node*> m_list;
 	int m_nextKey = 1;
 
-	int m_findWithKey(int _key);
+	int m_findWithKey(int _key) const;
 public:
 	/*
 		* Создаёт граф размера _size
@@ -69,7 +21,7 @@ public:
 	/*
 		* Удаляет прошлый граф и создаёт новый граф размера _size
 	*/
-	void makeNewGraph(size_t _size = 0);
+	void makeGraph(size_t _size = 0);
 
 	/* 
 		* Удаляет весь граф 
@@ -99,10 +51,30 @@ public:
 	/*
 		* Выводит граф в виде иерархического списка
 	*/
-	void outList();
+	void outList() const;
+
+	/*
+		Возвращает список всех ключей в данном графе
+	*/
+	Dlist<int> getKeys() const;
 
 	/*
 		* Возвращает размер графа
 	*/
-	int size();
+	int size() const;
+
+	/* 
+		* Возврщает список ключей, на которые ссылается данный элемент 
+	*/
+	Dlist<int> linksFrom(int _key) const;
+
+	/* 
+		* Возвращает число ключей, на которые ссылается данный элемент 
+	*/
+	int linksAmountFrom(int _key) const;
+
+	/* 
+		* Возвращает число ключей, которые ссылаются на данный элемент 
+	*/
+	int linksAmountTo(int _key) const;
 };
