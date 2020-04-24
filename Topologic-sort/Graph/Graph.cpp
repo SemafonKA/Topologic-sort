@@ -1,71 +1,9 @@
 #include "Graph.h"
+#include <utility>
+
 using n_Graph::Node;
 
-// Resourses for class Node
-Node::Node(int _key) {
-	m_key = _key;
-}
-
-Node::~Node() {
-	while (m_links.size() > 0) {
-		removeLinkTo(m_links.at(0));
-	}
-	while (m_parents.size() > 0) {
-		m_parents.at(0)->removeLinkTo(this);
-	}
-}
-
-int Node::key() const { return m_key; }
-
-int Node::parentsAmount() const { return m_parents.size(); }
-
-int Node::addLinkTo(Node* _to) {
-	if (isLinkedTo(_to)) return 2;
-	
-	m_links.push_back(_to);
-	_to->m_parents.push_back(this);
-	return 1;
-}
-
-int Node::isLinkedTo(const Node* _to) const {
-	for (int i = 0; i < m_links.size(); ++i) {
-		if (_to == m_links.at(i)) return i + 1;
-	}
-	return 0;
-}
-
-int Node::isParentTo(const Node* _to) const {
-	for (int i = 0; i < _to->m_parents.size(); ++i) {
-		if (this == _to->m_parents.at(i)) return i + 1;
-	}
-	return 0;
-}
-
-int Node::removeLinkTo(Node* _to) {
-	int linkPos    = isLinkedTo(_to);
-	int parentPos  = isParentTo(_to);
-	if (linkPos == 0) return 2;
-	else {
-		_to->m_parents.remove(parentPos - 1);
-		m_links.remove(linkPos - 1);
-		return 1;
-	}
-}
-
-std::ostream& n_Graph::operator<<(std::ostream& _out, Node& _node) {
-	_out << _node.m_key << ")";
-	for (int i = 0; i < _node.m_links.size(); ++i) {
-		_out << " --> " << _node.m_links.at(i)->m_key;
-	}
-	_out << "   |   has " << _node.m_parents.size() << " parents" << std::endl;
-	return _out;
-}
-// End resourses for class Node
-
-
-
-// Resourses for class Graph
-int Graph::m_findWithKey(int _key) {
+int Graph::m_findWithKey(int _key) const {
 	if (_key < m_nextKey / 2) {
 		for (int i = 0; i < m_list.size(); ++i) {
 			Node* currentElem = m_list.at(i);
@@ -84,11 +22,12 @@ int Graph::m_findWithKey(int _key) {
 }
 
 Graph::Graph(size_t _size) {
-	makeNewGraph(_size);
+	makeGraph(_size);
 }
 
-void Graph::makeNewGraph(size_t _size) {
+void Graph::makeGraph(size_t _size) {
 	removeAll();
+	m_nextKey = 1;
 	for (int i = 0; i < _size; ++i) {
 		m_list.push_back();
 		m_list.back() = new Node(m_nextKey++);
@@ -148,24 +87,47 @@ int Graph::addElement(int _key) {
 int Graph::removeElemenent(int _key) {
 	int pos = m_findWithKey(_key);
 	if (pos != 0) {		
-		Node* element =  m_list.remove(pos - 1);
+		Node* element =  m_list.pop(pos - 1);
 		delete element;
 		return 1;
 	}
 	return 0;
 }
 
-void Graph::outList() {
+void Graph::outList() const {
 	for (int i = 0; i < m_list.size(); ++i) {
 		Node& elem = *(m_list.at(i));
 		std::cout << elem << std::endl;
 	}
 }
 
-int Graph::size()
-{
+Dlist<int> Graph::getKeys() const {
+	Dlist<int> keys;
+	for (int i = 0; i < m_list.size(); ++i) {
+		keys.push_back(m_list.at(i)->key());
+	}
+	sort(keys);
+	return keys;
+}
+
+int Graph::size() const {
 	return m_list.size();
 }
 
+Dlist<int> Graph::linksFrom(int _key) const {
+	int elementPos = m_findWithKey(_key);
+	if (elementPos == 0) return Dlist<int>();
+	return m_list.at(elementPos - 1)->links();
+}
 
-// End resourses for class Graph
+int Graph::linksAmountFrom(int _key) const {
+	int elementPos = m_findWithKey(_key);
+	if (elementPos == 0) return -1;
+	return m_list.at(elementPos - 1)->links().size();
+}
+
+int Graph::linksAmountTo(int _key) const {
+	int elementPos = m_findWithKey(_key);
+	if (elementPos == 0) return -1;
+	return m_list.at(elementPos - 1)->parentsAmount();
+}

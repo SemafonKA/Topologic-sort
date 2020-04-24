@@ -148,11 +148,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Graph\Graph.cpp" />
+    <ClCompile Include="Graph\Graph.Node.cpp" />
+    <ClCompile Include="Graph\Topological_sort.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Double linked list\Dlist.h" />
+    <ClInclude Include="Dlist\Dlist.h" />
     <ClInclude Include="Graph\Graph.h" />
+    <ClInclude Include="Graph\Graph.Node.h" />
+    <ClInclude Include="Graph\Topological_sort.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="IO files\input.txt" />
