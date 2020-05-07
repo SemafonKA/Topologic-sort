@@ -126,8 +126,80 @@ int Graph::linksAmountFrom(int _key) const {
 	return m_list.at(elementPos - 1)->links().size();
 }
 
+Dlist<int> Graph::linksTo(int _key) const {
+	int elementPos = m_findWithKey(_key);
+	if (elementPos == 0) return Dlist<int>();
+	return m_list.at(elementPos - 1)->parents();
+}
+
 int Graph::linksAmountTo(int _key) const {
 	int elementPos = m_findWithKey(_key);
 	if (elementPos == 0) return -1;
 	return m_list.at(elementPos - 1)->parentsAmount();
+}
+
+
+/* Checks that all keys belong to subgraphs */
+bool isAllSubgraphsFounded(const Dlist<std::pair<int, int>>& _list) {
+	for (int i = 0; i < _list.size(); ++i) {
+		if (_list.at(i).second == 0) return false;
+	}
+	return true;
+}
+
+/* Searches element position in list by key */
+int findPos(int _key, const Dlist<std::pair<int, int>>& _list) {
+	for (int i = 0; i < _list.size(); ++i) {
+		if (_list.at(i).first == _key) return i;
+	}
+	return -1;
+}
+
+/* Checks if a key element belongs to a subgraph */
+bool isBelongToSubgraph(int _key, const Dlist<std::pair<int, int>>& _list) {
+	return _list.at(findPos(_key, _list)).second != 0;
+}
+
+std::pair<int, Dlist<int>> Graph::subgraphs() const {
+	int subgraphsCount{ 0 };
+	Dlist<std::pair<int, int>> keys;				// pair<key, subgraph number>
+	keys.resize(this->size());
+	Dlist<int> inputKeys = getKeys();						
+	for (int i = 0; i < keys.size(); ++i) {
+		keys.at(i).first = inputKeys.at(i);
+	}
+
+	while (!isAllSubgraphsFounded(keys)) {			
+		int i{ 0 };
+		for (i = 0; keys.at(i).second != 0 && i < keys.size(); ++i);	// find element without subgraph
+		Dlist<int> queue_keys;									
+		queue_keys.push_back(keys.at(i).first);							// push this element to queue
+		subgraphsCount++;										
+
+		while (!queue_keys.isEmpty()) {									// pushing all parents and childs from popped key
+			int key = queue_keys.pop_front();
+			keys.at(findPos(key, keys)).second = subgraphsCount;
+
+			Dlist<int> parents = linksTo(key);
+			while (!parents.isEmpty()) {
+				int parentKey = parents.pop_back();
+				if (!isBelongToSubgraph(parentKey, keys))
+					queue_keys.push_back(parentKey);
+			}
+
+			Dlist<int> childs = linksFrom(key);
+			while (!childs.isEmpty()) {
+				int childKey = childs.pop_back();
+				if (!isBelongToSubgraph(childKey, keys))
+					queue_keys.push_back(childKey);
+			}
+		}
+	}
+
+	std::pair<int, Dlist<int>> out;
+	out.first = subgraphsCount;
+	for (int i = 0; i < keys.size(); ++i) {
+		out.second.push_back(keys.at(i).second);
+	}
+	return out;
 }

@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 #include <fstream>
 #include "Graph/Graph.h"
-#include "Graph/Topological_sort.h"
 #include <fstream>
 
 using namespace std;
@@ -23,32 +22,34 @@ void getFromFile(const string& _adress, Graph& _to) {
     ifile.close();
 }
 
-void putToFile(const string& _adress, const Dlist<int>& _graph) {
+void putToFile(const string& _adress, const pair<int, Dlist<int>>& _subgraphs) {
     ofstream ofile(_adress, ios::trunc | ios::out);
-    if (_graph.size() == 0) ofile << -1;
-    else 
-        for (size_t i = 0; i < _graph.size(); i++) {
-            ofile << _graph.at(i) << " ";
-        }
+    ofile << _subgraphs.first << endl;
+    const Dlist<int>& keys = _subgraphs.second;
+    for (int i = 0; i < keys.size(); ++i) {
+        ofile << keys.at(i) << " ";
+    }
     ofile.close();
 }
-} // namespace File
+} // namespace n_Graph
 
 int main(){
     system("chcp 65001"); system("cls");
 
-    cout << "Reading and making graph..." << endl << endl;
+    cout << "Reading and making graph... \n\n";
     Graph graph;
     n_Graph::getFromFile(inputFile, graph);
     graph.outList();
 
-    cout << "Making topoligical sort for graph..." << endl << endl;
-    Dlist<int> sorted = Topological_sort::forGraph(graph);
+    cout << "Getting subgraphs... \n\n";
+    pair<int, Dlist<int>> subgraphs;
+    subgraphs = graph.subgraphs();
 
-    cout << "Writing results in output.txt file... ";
-    n_Graph::putToFile(outputFile, sorted);
+    cout << "Writing results in output.txt file... \n\n";
+    n_Graph::putToFile(outputFile, subgraphs);
 
     cout << "\nPress enter to close";
+    cin.ignore(cin.rdbuf()->in_avail());
     cin.get();
     return 0;
 }

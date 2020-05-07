@@ -1,8 +1,17 @@
+///////////////////////////////////////////////////////////////////
+//                                                               //
+//                      Graph v.1.0.1                            //
+//                Project made by SemafonKA                      //
+//          Me on gitHub (https://github.com/SemafonKA)          //
+//                                                               //
+///////////////////////////////////////////////////////////////////
+
 #pragma once
 
 #include "Graph.Node.h"
-#include <iostream>
 #include "../Dlist/Dlist.h"
+#include <iostream>
+#include <utility>
 
 class Graph {
 private:
@@ -54,7 +63,8 @@ public:
 	void outList() const;
 
 	/*
-		Возвращает список всех ключей в данном графе
+		* Возвращает список всех ключей в данном графе
+		* (В порядке по возрастанию)
 	*/
 	Dlist<int> getKeys() const;
 
@@ -73,8 +83,18 @@ public:
 	*/
 	int linksAmountFrom(int _key) const;
 
+	/*
+		* Возвращает список ключей, которые ссылаются на данный элемент
+	*/
+	Dlist<int> linksTo(int _key) const;
 	/* 
 		* Возвращает число ключей, которые ссылаются на данный элемент 
 	*/
 	int linksAmountTo(int _key) const;
+
+	/*
+		Возвращает число подграфов и массив вершин в порядке 
+		возрастания, пронумерованных соответсвующим подграфом
+	*/
+	std::pair<int, Dlist<int>> subgraphs() const;
 };

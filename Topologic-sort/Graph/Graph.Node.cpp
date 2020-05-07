@@ -61,6 +61,15 @@ Dlist<int> n_Graph::Node::links() const {
 	return links;
 }
 
+Dlist<int> n_Graph::Node::parents() const {
+	Dlist<int> links;
+	for (int i = 0; i < m_parents.size(); ++i) {
+		links.push_back(m_parents.at(i)->m_key);
+	}
+	sort(links);
+	return links;
+}
+
 std::ostream& n_Graph::operator<<(std::ostream& _out, Node& _node) {
 	_out << _node.m_key << ")";
 	for (int i = 0; i < _node.m_links.size(); ++i) {
